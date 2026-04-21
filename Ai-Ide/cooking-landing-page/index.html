@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlavorFusion | Modern Cooking</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">Flavor<span>Fusion</span></div>
+            
+            <div class="nav-right">
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#recipes">Recipes</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider">
+                            <i class="fas fa-sun"></i>
+                            <i class="fas fa-moon"></i>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="burger">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Master the Art of <span>Modern Cooking</span></h1>
+            <p>Discover delicious recipes, professional tips, and culinary inspiration to elevate your kitchen game.</p>
+            <div class="hero-btns">
+                <a href="#recipes" class="btn btn-primary">Explore Recipes</a>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="https://images.unsplash.com/photo-1547592166-23ac45744acd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Delicious Food">
+        </div>
+    </section>
+
+    <section id="recipes" class="recipes">
+        <h2 class="section-title">Featured Recipes</h2>
+        <div class="recipe-grid">
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Salad">
+                <div class="recipe-info">
+                    <h3>Healthy Quinoa Bowl</h3>
+                    <p>Fresh vegetables and protein-packed quinoa for a perfect lunch.</p>
+                    <span class="tag">Vegan</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Pizza">
+                <div class="recipe-info">
+                    <h3>Artisan Neapolitan Pizza</h3>
+                    <p>Traditional dough with fresh mozzarella and basil leaves.</p>
+                    <span class="tag">Italian</span>
+                </div>
+            </div>
+            <div class="recipe-card">
+                <img src="https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Salmon">
+                <div class="recipe-info">
+                    <h3>Honey Glazed Salmon</h3>
+                    <p>Perfectly seared salmon with a sweet and savory glaze.</p>
+                    <span class="tag">Seafood</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <div class="about-container">
+            <div class="about-text">
+                <h2>Our Story</h2>
+                <p>At FlavorFusion, we believe that cooking is more than just preparing food; it's an art form and a way to connect with loved ones.</p>
+                <p>Whether you're a beginner or a seasoned chef, we have something to inspire your next meal.</p>
+            </div>
+            <div class="about-stats">
+                <div class="stat">
+                    <h3>500+</h3>
+                    <p>Recipes</p>
+                </div>
+                <div class="stat">
+                    <h3>50k+</h3>
+                    <p>Followers</p>
+                </div>
+                <div class="stat">
+                    <h3>10+</h3>
+                    <p>Expert Chefs</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="newsletter">
+        <div class="newsletter-content">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Get the latest recipes and cooking tips delivered straight to your inbox.</p>
+            <form id="subscribe-form">
+                <input type="email" placeholder="Your Email Address" required>
+                <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">Flavor<span>Fusion</span></div>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-pinterest"></i></a>
+            </div>
+            <p>&copy; 2023 FlavorFusion. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
