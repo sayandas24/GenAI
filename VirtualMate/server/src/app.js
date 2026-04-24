@@ -6,7 +6,9 @@ import settingsRoute from './routes/settings.route.js'
 const app = express()
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174'],
+  origin: process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
+    : ['http://localhost:5173', 'http://localhost:5174'],
   credentials: true
 }))
 
