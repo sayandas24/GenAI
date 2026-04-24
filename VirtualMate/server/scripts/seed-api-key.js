@@ -7,7 +7,7 @@ import 'dotenv/config';
 import mongoose from 'mongoose';
 import { settingsModel } from '../src/models/settings.model.js';
 
-const GEMINI_API_KEY = 'AIzaSyDtVrvnrkCWf6KkxpQgrpi6LhmWpTLDfeU';
+const GEMINI_API_KEY = null
 
 async function seed() {
   await mongoose.connect(process.env.MONGO_URI);
