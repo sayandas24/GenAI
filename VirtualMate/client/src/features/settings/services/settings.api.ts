@@ -18,7 +18,7 @@ export interface SettingsMessageResponse {
 }
 
 const api = axios.create({
-  baseURL: "http://localhost:4000/api/settings",
+  baseURL: `${import.meta.env.VITE_API_URL || "http://localhost:4000"}/api/settings`,
   withCredentials: true,
   headers: { "Content-Type": "application/json" },
 });
