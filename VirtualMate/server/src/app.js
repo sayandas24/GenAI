@@ -8,7 +8,7 @@ const app = express()
 app.use(cors({
   origin: process.env.CLIENT_URL
     ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
-    : ['http://localhost:5173', 'http://localhost:5174'],
+    : ['http://localhost:5173', 'http://localhost:5174', 'https://virtualmate.vercel.app'],
   credentials: true
 }))
 
