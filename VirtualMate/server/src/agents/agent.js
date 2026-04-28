@@ -1,7 +1,8 @@
 import { GoogleGenAI } from '@google/genai'
-import { modelInstruction } from '../prompts/mate.prompt.js';
 import { chatModel } from '../models/chat.model.js';
 import { settingsModel } from '../models/settings.model.js';
+import { sessionModel } from '../models/session.model.js';
+import { resolvePrompt } from '../prompts/registry.js';
 
 /**
  * Resolves the Gemini API key exclusively from the database.
@@ -20,11 +21,38 @@ async function resolveApiKey() {
 }
 
 /**
- * Fetches all previous messages from MongoDB and maps them
- * to the format expected by the Gemini Chat API.
+ * Resolves the correct system instruction for a session.
+ *
+ * Flow: session_id → Session doc → avatar.prompt_key → local registry → systemInstruction
+ *
+ * Prompts are stored locally in /prompts/*.prompt.js files and referenced via registry.js.
+ * Only the lightweight `prompt_key` string is stored in the DB on the Avatar document.
+ *
+ * @param {string} session_id
+ * @returns {Promise<string>} The resolved system instruction string
  */
-async function buildHistoryFromDB() {
-  const messages = await chatModel.find({}).sort({ createdAt: 1 }).lean();
+async function resolveSystemInstruction(session_id) {
+  if (!session_id) return resolvePrompt(null);
+
+  const session = await sessionModel
+    .findById(session_id)
+    .populate('avatar_id', 'prompt_key')  // Only fetch the key, not the entire avatar doc
+    .lean();
+
+  const promptKey = session?.avatar_id?.prompt_key;
+  return resolvePrompt(promptKey);
+}
+
+/**
+ * Fetches previous messages for a specific session from MongoDB
+ * and maps them to the format expected by the Gemini Chat API.
+ *
+ * @param {string} session_id
+ * @returns {Promise<Array>} Gemini-formatted chat history
+ */
+async function buildHistoryFromDB(session_id) {
+  const query = session_id ? { session_id } : {};
+  const messages = await chatModel.find(query).sort({ createdAt: 1 }).lean();
 
   return messages.map((msg) => ({
     role: msg.role,
@@ -33,20 +61,27 @@ async function buildHistoryFromDB() {
 }
 
 /**
- * Runs the AI agent with full conversation history sourced from the database.
- * Fetches the API key from the DB on every call so key changes take effect instantly.
+ * Runs the AI agent for a specific session.
+ * - System instruction resolved from local registry (zero extra DB read for prompt content).
+ * - Chat history scoped to this session only.
+ * - API key always fetched fresh so key changes take effect instantly.
+ *
+ * @param {string} userQuery - The user's message
+ * @param {string} session_id - Ties user + avatar together
+ * @returns {Promise<string>} The AI's text response
  */
-async function agent(userQuery) {
-  const [apiKey, history] = await Promise.all([
+async function agent(userQuery, session_id) {
+  const [apiKey, systemInstruction, history] = await Promise.all([
     resolveApiKey(),
-    buildHistoryFromDB(),
+    resolveSystemInstruction(session_id),
+    buildHistoryFromDB(session_id),
   ]);
 
   const ai = new GoogleGenAI({ apiKey });
 
   const chat = ai.chats.create({
     model: 'gemini-2.5-flash-lite',
-    config: { systemInstruction: modelInstruction },
+    config: { systemInstruction },
     history,
   });
 

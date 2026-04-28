@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { clearChat, createChats, getChats } from "../controllers/chat.controller.js";
+import { clearAllChats, clearChat, createChat, getChats } from "../controllers/chat.controller.js";
 
 const chatRoute = Router()
 
 chatRoute.get('/', getChats)
-chatRoute.post('/', createChats)
-chatRoute.delete('/delete/all', clearChat)
+chatRoute.post('/', createChat)
+
+
+chatRoute.delete('/clear/user', clearChat)
+chatRoute.delete('/clear/all', clearAllChats)
 
 export default chatRoute
