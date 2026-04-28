@@ -1,4 +1,5 @@
 import { defaultInstruction } from './default.prompt.js';
+import { interviewerInstruction as interviewer } from './interviewer.prompt.js';
 import { rayaInstruction as raya } from './raya.prompt.js';
 
 /**
@@ -14,6 +15,7 @@ import { rayaInstruction as raya } from './raya.prompt.js';
  */
 const promptRegistry = {
   raya,
+  interviewer,
   // buddy,
   // mentor,
   // therapist,
