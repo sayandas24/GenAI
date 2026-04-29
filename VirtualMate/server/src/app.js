@@ -3,7 +3,7 @@ import cors from 'cors'
 import chatRoute from './routes/chat.route.js'
 import settingsRoute from './routes/settings.route.js'
 import { sessionRouter } from './routes/session.routes.js'
-import { authRouter } from './routes/user.route.js'
+import { authRouter } from './routes/auth.route.js'
 import { avatarRouter } from './routes/avatar.route.js'
 
 const app = express()
@@ -18,7 +18,7 @@ app.use(cors({
 app.use(express.json())
 
 
-app.use('/api/user', authRouter)
+app.use('/api/authenticate', authRouter)
 app.use('/api/avatar', avatarRouter)
 app.use('/api/chats', chatRoute)
 app.use('/api/settings', settingsRoute)

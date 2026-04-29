@@ -6,7 +6,7 @@ import type {
 } from "../types/chat.types";
 
 const api = axios.create({
-  baseURL: `${import.meta.env.VITE_API_URL || "http://localhost:4000"}/api/chats`,
+  baseURL: `${import.meta.env.VITE_API_URL}/api/chats`,
   withCredentials: true,
   headers: {
     "Content-Type": "application/json",

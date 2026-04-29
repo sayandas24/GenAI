@@ -3,7 +3,7 @@ import { ApiError } from '../utils/ApiError.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 
-export const createUser = asyncHandler(async (req, res) => {
+export const authenticateUser = asyncHandler(async (req, res) => {
 
   const { username, email } = req.body;
 
@@ -13,8 +13,9 @@ export const createUser = asyncHandler(async (req, res) => {
 
   // Check if user already exists
   const existingUser = await userModel.findOne({ $or: [{ email }, { username }] });
+
   if (existingUser) {
-    throw new ApiError(409, "User with this email is already exist");
+    return res.status(200).json(new ApiResponse(200, { data: existingUser }, "User already exist returning the user"));
   }
 
   const newUser = await userModel.create({
