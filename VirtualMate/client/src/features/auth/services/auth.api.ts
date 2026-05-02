@@ -8,7 +8,7 @@ const api = axios.create({
   },
 });
 
-async function authenticateAPI(userdata) {
+async function authenticateAPI(userdata: any) {
   const response = await api.post("/", userdata);
 
   console.log(response.data, "response");
