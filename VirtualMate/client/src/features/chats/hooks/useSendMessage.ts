@@ -1,6 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { sendMessageAPI } from "../services/chat.api";
-import type { GetChatsResponse, Chat } from "../types/chat.types";
+import type { Chat, GetChatsResponse } from "../types/chat.types";
+
+interface SendMessagePayload {
+  content: string;
+  session_id: string;
+}
 
 export const useSendMessage = () => {
   const qc = useQueryClient();
@@ -13,39 +18,41 @@ export const useSendMessage = () => {
      * Immediately injects the user message into the cache so it
      * appears in the UI without waiting for the server round-trip.
      */
-    onMutate: async (message: string) => {
-      // Cancel any in-flight refetches so they don't overwrite our optimistic entry
-      await qc.cancelQueries({ queryKey: ["chats"] });
+    onMutate: async ({ content, session_id }: SendMessagePayload) => {
+      const queryKey = ["chats", session_id];
 
-      // Snapshot current cache so we can roll back on error
-      const previousChats = qc.getQueryData<GetChatsResponse>(["chats"]);
+      // Cancel in-flight refetches so they don't overwrite our optimistic entry
+      await qc.cancelQueries({ queryKey });
 
-      // Build an optimistic chat entry that looks like a real DB document
+      // Snapshot current cache for rollback on error
+      const previousData = qc.getQueryData<GetChatsResponse>(queryKey);
+
+      // Build an optimistic message that looks like a real DB document
       const optimisticMessage: Chat = {
         _id: `optimistic-${Date.now()}`,
-        content: message,
+        content,
         role: "user",
+        session_id,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
 
       // Inject it into the cache immediately
-      qc.setQueryData<GetChatsResponse>(["chats"], (old) => ({
-        message: old?.message ?? "",
-        chats: [...(old?.chats ?? []), optimisticMessage],
+      qc.setQueryData<GetChatsResponse>(queryKey, (old) => ({
+        ...(old ?? { statusCode: 200, message: "", success: true }),
+        data: [...(old?.data ?? []), optimisticMessage],
       }));
 
-      // Return snapshot for rollback in onError
-      return { previousChats };
+      return { previousData, queryKey };
     },
 
     /**
      * Rollback — if the mutation fails, restore the previous cache
      * so the optimistic message disappears and nothing is corrupted.
      */
-    onError: (_err, _message, context) => {
-      if (context?.previousChats) {
-        qc.setQueryData<GetChatsResponse>(["chats"], context.previousChats);
+    onError: (_err, _payload, context) => {
+      if (context?.previousData) {
+        qc.setQueryData(context.queryKey, context.previousData);
       }
     },
 
@@ -54,8 +61,8 @@ export const useSendMessage = () => {
      * (success or error) to replace the optimistic entry with
      * the real persisted data including the AI response.
      */
-    onSettled: () => {
-      qc.invalidateQueries({ queryKey: ["chats"] });
+    onSettled: (_data, _err, payload) => {
+      qc.invalidateQueries({ queryKey: ["chats", payload.session_id] });
     },
   });
 };

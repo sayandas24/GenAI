@@ -14,7 +14,6 @@ const api = axios.create({
 });
 
 // ─── Error Helper ─────────────────────────────────────────────────────────────
-
 export function extractErrorMessage(error: unknown, fallback: string): string {
   if (error instanceof AxiosError) {
     return error.response?.data?.message ?? error.message ?? fallback;
@@ -23,27 +22,33 @@ export function extractErrorMessage(error: unknown, fallback: string): string {
 }
 
 /**
- * Fetch all chat messages in chronological order.
+ * Fetch all messages for a session in chronological order.
  */
-export async function getAllChatsAPI(): Promise<GetChatsResponse> {
-  const { data } = await api.get<GetChatsResponse>("/");
+export async function getAllChatsAPI(sessionId: string): Promise<GetChatsResponse> {
+  const { data } = await api.get<GetChatsResponse>("/", {
+    params: { session_id: sessionId },
+  });
   return data;
 }
 
 /**
  * Send a user message and receive the AI response.
+ * @param payload - `{ content, session_id }`
  */
-export async function sendMessageAPI(
-  message: string,
-): Promise<CreateChatResponse> {
-  const { data } = await api.post<CreateChatResponse>("/", { message });
+export async function sendMessageAPI(payload: {
+  content: string;
+  session_id: string;
+}): Promise<CreateChatResponse> {
+  const { data } = await api.post<CreateChatResponse>("/", payload);
   return data;
 }
 
 /**
- * Delete all messages in the conversation history.
+ * Delete all messages belonging to a session.
  */
-export async function clearChatAPI(): Promise<ClearChatResponse> {
-  const { data } = await api.delete<ClearChatResponse>("/delete/all");
+export async function clearChatAPI(sessionId: string): Promise<ClearChatResponse> {
+  const { data } = await api.delete<ClearChatResponse>("/clear/user", {
+    params: { session_id: sessionId },
+  });
   return data;
 }

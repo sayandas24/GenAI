@@ -15,7 +15,6 @@ const createChat = asyncHandler(async (req, res) => {
 
   // Passing session_id so runAgent can load history and system prompt for this specific session
   const aiResponse = await runAgent(content, session_id)
-  console.log(aiResponse, "ai response received")
 
   await chatModel.create({ content, role: "user", session_id })
   const newChat = await chatModel.create({ content: aiResponse, role: "model", session_id })
