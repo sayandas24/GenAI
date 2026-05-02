@@ -22,12 +22,12 @@ export const useAuthUser = () => {
       if (user) {
         // Just in case this fires from another tab, we sync the backend
         try {
+          const token = await user.getIdToken();
           await authenticateAPI({
             username: user.displayName || user.email?.split("@")[0] || "User",
             email: user.email,
+            token: token,
           });
-
-          const token = await user.getIdToken();
           document.cookie = `token=${token}; path=/; max-age=3600; SameSite=Lax`;
           queryClient.setQueryData(AUTH_QUERY_KEY, user);
         } catch (error) {
@@ -57,15 +57,16 @@ export const useAuthUser = () => {
 
           if (user) {
             try {
+              const token = await user.getIdToken();
               // 1. Verify user exists in the backend DB
               await authenticateAPI({
                 username:
                   user.displayName || user.email?.split("@")[0] || "User",
                 email: user.email,
+                token: token,
               });
 
               // 2. Set the cookie if verification succeeds
-              const token = await user.getIdToken();
               document.cookie = `token=${token}; path=/; max-age=3600; SameSite=Lax`;
               resolve(user);
             } catch (error) {

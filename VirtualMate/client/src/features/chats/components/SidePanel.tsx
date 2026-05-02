@@ -1,5 +1,5 @@
 import React from "react";
-import { useChats } from "../../chats/hooks/useChats";
+import { useChats } from "../hooks/useAvatars";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 

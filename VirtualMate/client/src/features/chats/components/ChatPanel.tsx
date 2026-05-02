@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useChats } from "../hooks/useChats";
+import { useChats } from "../hooks/useAvatars";
 import { useSendMessage } from "../hooks/useSendMessage";
 import { useClearChat } from "../hooks/useClearChat";
 import MessageBubble from "./MessageBubble";
