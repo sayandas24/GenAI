@@ -1,12 +1,10 @@
 import React from "react";
-import AvatarSidebar from "./components/AvatarSidebar";
-import ChatPanel from "./components/ChatPanel";
+import { useMediaQuery } from "../../../../hooks/useMediaQuery";
+import DesktopLayout from "./DesktopLayout";
+import MobileLayout from "../mobile/MobileLayout";
 
 export default function AllChatsMain() {
-  return (
-    <main className="flex h-screen w-screen bg-[#0e1621] text-white overflow-hidden font-sans">
-      <AvatarSidebar />
-      <ChatPanel />
-    </main>
-  );
+  // Tailwind's `md` breakpoint = 768px
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  return isMobile ? <MobileLayout /> : <DesktopLayout />;
 }

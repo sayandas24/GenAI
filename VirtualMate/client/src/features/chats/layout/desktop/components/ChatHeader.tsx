@@ -12,6 +12,10 @@ interface ChatHeaderProps {
   avatar?: Avatar;
 }
 
+/**
+ * Desktop-only chat header.
+ * Mobile has its own MobileChatHeader with a back button.
+ */
 export default function ChatHeader({ avatar }: ChatHeaderProps) {
   return (
     <div className="h-[56px] shrink-0 bg-[#17212b] border-b border-[#0e1621] flex items-center px-4 gap-3">
@@ -25,7 +29,6 @@ export default function ChatHeader({ avatar }: ChatHeaderProps) {
             (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(avatar?.name ?? "A")}&background=2b5278&color=fff`;
           }}
         />
-        {/* Online dot */}
         <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-[#17212b]" />
       </div>
 
